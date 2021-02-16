@@ -137,11 +137,11 @@ if __name__ == '__main__':
 	create_label_filetree(train_direc)
 	create_label_filetree(val_direc)
 	create_label_filetree(test_direc)
-	'''
+
 	dump_frames(A4C_raw, A4C_frames)
 	dump_frames(PLAX_raw, PLAX_frames)
 	dump_frames(PSAX_raw, PSAX_frames)
-	'''
+	
 	split_frames(root, 'A4C', train_direc, val_direc, test_direc, TRAIN_RATIO, VAL_RATIO, TEST_RATIO)
 	split_frames(root, 'PLAX', train_direc, val_direc, test_direc, TRAIN_RATIO, VAL_RATIO, TEST_RATIO)
 	split_frames(root, 'PSAX', train_direc, val_direc, test_direc, TRAIN_RATIO, VAL_RATIO, TEST_RATIO)

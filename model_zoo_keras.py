@@ -3,11 +3,11 @@ import os
 import skimage.io as io
 import skimage.transform as trans
 import numpy as np
-from tensorflow.keras.models import *
-from tensorflow.keras.layers import *
-from tensorflow.keras.optimizers import *
-from tensorflow.keras.applications import ResNet50
-from tensorflow.keras.callbacks import ModelCheckpoint, LearningRateScheduler
+from keras.models import *
+from keras.layers import *
+from keras.optimizers import *
+from keras.applications.resnet50 import ResNet50
+from keras.callbacks import ModelCheckpoint, LearningRateScheduler
 import tensorflow as tf
 
 def Resnet50_model(saved_weights = None, input_size=(224,224,1), lr=1e-4, decay_epochs=0):

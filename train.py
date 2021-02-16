@@ -1,4 +1,6 @@
 import os
+#os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
+#os.environ["CUDA_VISIBLE_DEVICES"]="0"
 import numpy as np 
 import random
 import pickle as pkl
@@ -8,16 +10,16 @@ from tensorflow.keras.callbacks import EarlyStopping, LambdaCallback, ReduceLROn
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from utils import *
 
-RECALCULATE = True
+RECALCULATE = False
 
 NROWS = 224
 NCOLS = 224
 NCLASS = 3
-BATCH_SIZE = 32
-EPOCH = 1000
+BATCH_SIZE = 64
+EPOCH = 50
 DECAY_EPOCHS = 0
 
-MODEL_NAME = 'Resnet50_021621'
+MODEL_NAME = 'Resnet50_021621_cleanedset'
 CKPT_MONITOR = 'val_loss'
 CKPT_MODE = 'min'
 LR = 1e-4
@@ -28,6 +30,7 @@ if __name__ == '__main__':
 	root = '/scratch/groups/willhies/echo_view_classifier/'
 
 	ckpt_dir = os.path.join(root, 'model_weights')
+	safe_makedir(ckpt_dir)
 	ckpt_path = os.path.join(ckpt_dir, MODEL_NAME + '.hdf5')
 
 	init_epoch_path = os.path.join(ckpt_dir, MODEL_NAME + '_epoch.pkl')
@@ -75,7 +78,8 @@ if __name__ == '__main__':
 
 	num_cpu = cpu_count()
 
-	history = model.fit_generator(generator=train_gen, epochs=EPOCH, steps_per_epoch = STEP_SIZE_TRAIN, validation_data=val_gen, validation_steps=STEP_SIZE_VAL, callbacks=[epoch_logger, reduce_lr, csv_logger])
+	history = model.fit_generator(generator=train_gen, epochs=EPOCH, steps_per_epoch = STEP_SIZE_TRAIN, validation_data=val_gen, validation_steps=STEP_SIZE_VAL, callbacks=[epoch_logger, reduce_lr, csv_logger, model_checkpoint], use_multiprocessing=True, workers=num_cpu)
+	#history = model.fit_generator(generator=train_gen, epochs=EPOCH, steps_per_epoch = STEP_SIZE_TRAIN, validation_data=val_gen, validation_steps=STEP_SIZE_VAL, callbacks=[epoch_logger, reduce_lr, csv_logger])
 	#history = model.fit(x=train_gen, batch_size=BATCH_SIZE, epochs=EPOCH, verbose=1, callbacks=[epoch_logger, reduce_lr, csv_logger], use_multiprocessing=True, workers=num_cpu)
 
 
