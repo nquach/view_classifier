@@ -28,7 +28,7 @@ def Resnet50_model(saved_weights = None, input_size=(224,224,1), lr=1e-4, decay_
 		if decay_epochs > 0:
 			opt = Adam(lr=lr, decay=lr / config.NUM_EPOCHS)
 		model.compile(optimizer=opt, loss='categorical_crossentropy', metrics=['accuracy'])
-		model.summary()
+		#model.summary()
 		return model
 
 '''

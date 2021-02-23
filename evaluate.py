@@ -58,8 +58,8 @@ if __name__ == '__main__':
 	test_aug = ImageDataGenerator()
 
 	train_gen = train_aug.flow_from_directory(directory='/scratch/groups/willhies/echo_view_classifier/dataset/train/', target_size=(224,224), color_mode='grayscale', batch_size=BATCH_SIZE, class_mode='categorical', shuffle=True)
-	val_gen = val_aug.flow_from_directory(directory='/scratch/groups/willhies/echo_view_classifier/dataset/val/', target_size=(224,224), color_mode='grayscale', batch_size=BATCH_SIZE, class_mode='categorical', shuffle=True)
-	#test_gen = test_aug.flow_from_directory(directory='/scratch/groups/willhies/echo_view_classifier/dataset/test/', target_size=(224,224), color_mode='grayscale', batch_size=BATCH_SIZE, class_mode='categorical', shuffle=True)
+	val_gen = val_aug.flow_from_directory(directory='/scratch/groups/willhies/echo_view_classifier/dataset/val/', target_size=(224,224), color_mode='grayscale', batch_size=BATCH_SIZE, class_mode='categorical', shuffle=False)
+	test_gen = test_aug.flow_from_directory(directory='/scratch/groups/willhies/echo_view_classifier/dataset/test/', target_size=(224,224), color_mode='grayscale', batch_size=BATCH_SIZE, class_mode='categorical', shuffle=False)
 
 	STEP_SIZE_TRAIN = train_gen.n // train_gen.batch_size
 	STEP_SIZE_VAL = val_gen.n // val_gen.batch_size
@@ -78,7 +78,7 @@ if __name__ == '__main__':
 
 	num_cpu = cpu_count()
 
-	history = model.fit_generator(generator=train_gen, epochs=EPOCH, steps_per_epoch = STEP_SIZE_TRAIN, validation_data=val_gen, validation_steps=STEP_SIZE_VAL, callbacks=[epoch_logger, reduce_lr, csv_logger, model_checkpoint], use_multiprocessing=True, workers=num_cpu)
+	scores = model.predict(test_gen)
 	#history = model.fit_generator(generator=train_gen, epochs=EPOCH, steps_per_epoch = STEP_SIZE_TRAIN, validation_data=val_gen, validation_steps=STEP_SIZE_VAL, callbacks=[epoch_logger, reduce_lr, csv_logger])
 	#history = model.fit(x=train_gen, batch_size=BATCH_SIZE, epochs=EPOCH, verbose=1, callbacks=[epoch_logger, reduce_lr, csv_logger], use_multiprocessing=True, workers=num_cpu)
 
